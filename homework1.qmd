@@ -25,14 +25,9 @@ library(skimr)
 
 # Data Manipulation
 
-## Problem 1: Use logical operators to find flights that:
+All information below has been committed to my own github folder: https://github.com/edwardhdavies/mydsb2023
 
-    -   Had an arrival delay of two or more hours (\> 120 minutes)
-    -   Flew to Houston (IAH or HOU)
-    -   Were operated by United (`UA`), American (`AA`), or Delta (`DL`)
-    -   Departed in summer (July, August, and September)
-    -   Arrived more than two hours late, but didn't leave late
-    -   Were delayed by at least an hour, but made up over 30 minutes in flight
+## Problem 1: Use logical operators to find flights that:
 
 ```{r}
 #| label: problem-1
@@ -73,8 +68,10 @@ flights %>%
 
 <!-- -->
 
-    flights %>% 
-      filter(is.na(dep_time)) 
+```         
+flights %>% 
+  filter(is.na(dep_time)) 
+```
 
 ```{r}
 #| label: problem-2
@@ -110,6 +107,14 @@ ggplot(flights_summary, aes(x = month, y = prop_cancelled)) +
   ggtitle("Proportion of cancelled flights by month")
 ```
 
+There appears to be no consistent pattern in the proportion of cancelled flights across the year, however, very qualitative assumptions can be made from the following graph. It must be remembered that additional analysis is required to confirm these assumptions.
+
+The months that appear to have the highest proportion of cancellations are February, June, July and December.
+
+December is likely to have increased cancellations due to winter weather. February is often a stormy month in many countries. For example, this is seen particularly in the US as this is when their own Winter storms occur, such as the recent Winter Storm Olive.
+
+June and July are likely to have a higher proportion of cancellations and this is a very busy time for flying, with it being the start of summer. Airlines will often be at capacity during this period, and increase strain will likely increase the proportion of issues and therefore cancellations.
+
 ## Problem 3: What plane (specified by the `tailnum` variable) traveled the most times from New York City airports in 2013? Please `left_join()` the resulting table with the table `planes` (also included in the `nycflights13` package).
 
 For the plane with the greatest number of flights and that had more than 50 seats, please create a table where it flew to during 2013.
@@ -138,11 +143,9 @@ top_plane_routes
 
 ```
 
-## Problem 4: The `nycflights13` package includes a table (`weather`) that describes the weather during 2013. Use that table to answer the following questions:
+N328AA (an American Airlines Boeing 767-223ER) is the plane with the greatest number of flights from NYC airports in 2013.
 
-    -   What is the distribution of temperature (`temp`) in July 2013? Identify any important outliers in terms of the `wind_speed` variable.
-    -   What is the relationship between `dewp` and `humid`?
-    -   What is the relationship between `precip` and `visib`?
+## Problem 4: The `nycflights13` package includes a table (`weather`) that describes the weather during 2013. Use that table to answer the following questions:
 
 **What is the distribution of temperature (\`temp\`) in July 2013? Identify any important outliers in terms of the \`wind_speed\` variable.**
 
@@ -194,11 +197,7 @@ weather %>%
 
 Although it would be plausible to think that higher precipitation will lead to lower visibility, there does not seem to be a strong relationship between the two, as seen through the large variety in visibility at similar levels of precipitation.
 
-## Problem 5: Use the `flights` and `planes` tables to answer the following questions:
-
-    -   How many planes have a missing date of manufacture?
-    -   What are the five most common manufacturers?
-    -   Has the distribution of manufacturer changed over time as reflected by the airplanes flying from NYC in 2013? (Hint: you may need to use case_when() to recode the manufacturer name and collapse rare vendors into a category called Other.)
+## Problem 5: Use the `flights` and `planes` tables to answer the following questions
 
 **- How many planes have a missing date of manufacture?**
 
@@ -262,10 +261,14 @@ ggplot(planes_dept_nyc, aes(x = year, y = planes_manufactured, color = manufactu
 
 ```
 
+Over time, less popular plane manufacters such as Embraer and McDonnell have fallen into obscurity. Although the market became more fragmented prior to 2010, it is clear now that the market is mainly consolidated between Airbus and Boeing.
+
 ## Problem 6: Use the `flights` and `planes` tables to answer the following questions:
 
-    -   What is the oldest plane (specified by the tailnum variable) that flew from New York City airports in 2013?
-    -   How many airplanes that flew from New York City are included in the planes table?
+```         
+-   What is the oldest plane (specified by the tailnum variable) that flew from New York City airports in 2013?
+-   How many airplanes that flew from New York City are included in the planes table?
+```
 
 N381AA is the oldest plane that flew from NYC airports in 2013
 
@@ -299,8 +302,10 @@ flights %>%
 
 ## Problem 7: Use the `nycflights13` to answer the following questions:
 
-    -   What is the median arrival delay on a month-by-month basis in each airport?
-    -   For each airline, plot the median arrival delay for each month and origin airport.
+```         
+-   What is the median arrival delay on a month-by-month basis in each airport?
+-   For each airline, plot the median arrival delay for each month and origin airport.
+```
 
 **- What is the median arrival delay on a month-by-month basis in each airport?**
 
