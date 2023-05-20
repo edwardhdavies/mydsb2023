@@ -223,11 +223,28 @@ ggplot(grouped_data, aes(x = month, y = count)) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
--   How does the distribution of mass shooting fatalities differ between White and Black shooters? What about White and Latino shooters?
+The month with the most mass shootings is February.
+
+-   **How does the distribution of mass shooting fatalities differ between White and Black shooters? What about White and Latino shooters?**
+
+To analyse the distribution in mass shooting fatalities, we can generate a boxplot for white, latino and black shooters simultaneously:
 
 ```{r}
+# Filter out "Other" and NA values
+filtered_data <- mass_shootings %>%
+  filter(!is.na(race), race %in% c("White", "Black", "Latino", "Native American", "Asian"))
 
+# Create a boxplot of mass shooting fatalities by race
+ggplot(filtered_data, aes(x = race, y = fatalities, fill = race)) +
+  geom_boxplot() +
+  labs(title = "Distribution of Mass Shooting Fatalities by Race",
+       x = "Race",
+       y = "Number of Fatalities") +
+  scale_fill_manual(values = c("White" = "skyblue", "Black" = "darkorange", "Latino" = "green",
+                               "Native American" = "purple", "Asian" = "goldenrod"))
 ```
+
+Rather than just analyse
 
 ### Very open-ended
 
