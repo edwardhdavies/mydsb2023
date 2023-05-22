@@ -244,15 +244,64 @@ ggplot(filtered_data, aes(x = race, y = fatalities, fill = race)) +
                                "Native American" = "purple", "Asian" = "goldenrod"))
 ```
 
-Rather than just analyse
+Rather than just analyse white shooters independently with black and latino shooters, we can analyse shooters from a variety of races with one another. Regarding fatality distribution, white shooters have more outliers on the higher end of fatalities, whereas black shooters have a more concentrated fatality distribution, with latino individuals having the most condensed fatality distribution. One paper \[https://www.sciencedirect.com/science/article/abs/pii/S0091743522002250\] suggests that the reason white shooters often cause more fatalities is due to their increased probability to be utlising a legally owned weapon, which is more often a highly lethal weapon such as an assault rifle. This is opposed to black or latino shooters more often utilising a weapon sourced through other means, which often is of a smaller calibre/magazine.
 
 ### Very open-ended
 
 -   Are mass shootings with shooters suffering from mental illness different from mass shootings with no signs of mental illness in the shooter?
 
 ```{r}
+# Filter the dataset for mass shootings with information on mental illness
+filtered_data <- mass_shootings %>%
+  filter(!is.na(prior_mental_illness))
 
+# Step 3: Descriptive Analysis
+summary_stats <- filtered_data %>%
+  group_by(prior_mental_illness) %>%
+  summarize(
+    avg_fatalities = mean(fatalities),
+    avg_injured = mean(injured),
+    total_victims = sum(total_victims)
+  )
+
+
+# Step 5: Visualizations
+# Bar chart of average fatalities by mental illness status
+ggplot(summary_stats, aes(x = prior_mental_illness, y = avg_fatalities, fill = prior_mental_illness)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Average Fatalities: Shootings with and without Prior Signs of Mental Illness",
+    x = "Prior Mental Illness",
+    y = "Average Fatalities"
+  ) +
+  scale_fill_manual(values = c("Yes" = "skyblue", "No" = "darkorange"))
+
+
+
+# Create a summary table with counts by location and mental illness status
+summary_data <- filtered_data %>%
+  group_by(location_type, prior_mental_illness) %>%
+  summarize(count = n())
+
+# Create a stacked bar chart
+ggplot(summary_data, aes(x = location_type, y = count, fill = prior_mental_illness)) +
+  geom_bar(stat = "identity") +
+  labs(
+    title = "Number of Shootings by Location and Mental Illness Status",
+    x = "Location of Shooting",
+    y = "Count",
+    fill = "Prior Mental Illness"
+  ) +
+  theme(legend.position = "top")
 ```
+
+When looking at the visualisations above, there are clear trends we can determine from the behaviour of mass shooters who have or do not have prior mental illness.
+
+Those with prior mental illness on average are more lethal in their mass shootings, with a slightly higher average number of fatalities.
+
+More interestingly, locations for mass shootings such as Airports, Military areas and religious places have only been attacked by those with prior mental illness.
+
+Although these are interesting trends to observe, we cannot make strong conclusions from this data. Firstly, a large proportion of the data does not possess data surrounding prior mental illness for many different incidents. Secondly, those that have not been identified to have prior mental illness did not necessairly not have prior mental illness, as this may not have been officially identified due to limited mental health support in some areas. Finally, the dataset is incomplete, as it does not possess all mass shootings that occurred within this time period.
 
 -   Assess the relationship between mental illness and total victims, mental illness and location type, and the intersection of all three variables.
 
