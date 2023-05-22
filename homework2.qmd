@@ -255,7 +255,7 @@ Rather than just analyse white shooters independently with black and latino shoo
 filtered_data <- mass_shootings %>%
   filter(!is.na(prior_mental_illness))
 
-# Step 3: Descriptive Analysis
+#  Descriptive Analysis
 summary_stats <- filtered_data %>%
   group_by(prior_mental_illness) %>%
   summarize(
@@ -265,7 +265,7 @@ summary_stats <- filtered_data %>%
   )
 
 
-# Step 5: Visualizations
+# Visualizations
 # Bar chart of average fatalities by mental illness status
 ggplot(summary_stats, aes(x = prior_mental_illness, y = avg_fatalities, fill = prior_mental_illness)) +
   geom_bar(stat = "identity") +
@@ -306,10 +306,58 @@ Although these are interesting trends to observe, we cannot make strong conclusi
 -   Assess the relationship between mental illness and total victims, mental illness and location type, and the intersection of all three variables.
 
 ```{r}
+# Filter the dataset for mass shootings with information on mental illness
+filtered_data <- mass_shootings %>%
+  filter(!is.na(prior_mental_illness))
+
+# Calculate average total victims by mental illness and location type
+summary_data <- filtered_data %>%
+  group_by(prior_mental_illness, location_type) %>%
+  summarize(avg_total_victims = mean(total_victims))
+
+# Create a grouped bar chart
+ggplot(summary_data, aes(x = location_type, y = avg_total_victims, fill = prior_mental_illness)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  labs(
+    title = "Average Total Victims by Mental Illness and Location Type",
+    x = "Location of Shooting",
+    y = "Average Total Victims",
+    fill = "Prior Mental Illness"
+  ) +
+  theme(legend.position = "top")
 
 ```
 
-Make sure to provide a couple of sentences of written interpretation of your tables/figures. Graphs and tables alone will not be sufficient to answer this question.
+The prior graph gives us some interesting data to interpret.
+
+As previously discussed, there is an interesting relationship between prior mental illness and location of shooting.
+
+On a whole, when observing fatalities, as discussed previously, shooters within prior mental illness often carry out more fatal shootings. To determine whether this difference is statistically significant, we can carry out the following T-test.
+
+```{r}
+
+# Filter the dataset for mass shootings with information on mental illness and total victims
+filtered_data <- mass_shootings %>%
+  filter(!is.na(prior_mental_illness) & !is.na(total_victims))
+
+# Separate the data into two groups: shooters with and without prior mental illness
+group1 <- filtered_data %>%
+  filter(prior_mental_illness == "Yes") %>%
+  pull(total_victims)
+
+group2 <- filtered_data %>%
+  filter(prior_mental_illness == "No") %>%
+  pull(total_victims)
+
+# Perform t-test to compare the means of the two groups
+t_test_result <- t.test(group1, group2)
+
+t_test_result
+```
+
+With this returning a p-value of 0.1021, we can determine that this difference in fatalities between shooters with and without prior mental illness is not significant.
+
+Finally, locations such as schools and military areas often have higher fatalities on average. For schools, I suggest that this is due to the high density of victims in a viscinity. For military bases, I would suggest that this is due to ready access to highly lethal weapons, alongside highly skilled shooters due to their previous military training.
 
 # Exploring credit card fraud
 
